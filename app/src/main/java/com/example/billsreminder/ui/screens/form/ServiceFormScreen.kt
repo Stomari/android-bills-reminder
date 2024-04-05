@@ -77,10 +77,11 @@ fun ServiceFormScreen(
                 onCancelClick = { navigateBack() },
                 onSaveClick = {
                     coroutineScope.launch {
-                        viewModel.addService()
+                        viewModel.saveService()
                         navigateBack()
                     }
-                }
+                },
+                isEnabled = uiState.name.isNotEmpty()
             )
         }
     }
@@ -107,12 +108,21 @@ fun Input(
 }
 
 @Composable
-fun Buttons(modifier: Modifier = Modifier, onCancelClick: () -> Unit, onSaveClick: () -> Unit) {
+fun Buttons(
+    modifier: Modifier = Modifier,
+    onCancelClick: () -> Unit,
+    onSaveClick: () -> Unit,
+    isEnabled: Boolean
+) {
     Row(modifier = modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceEvenly) {
         OutlinedButton(onClick = { onCancelClick() }, modifier = Modifier.width(100.dp)) {
             Text(text = "Cancel")
         }
-        Button(onClick = { onSaveClick() }, modifier = Modifier.width(100.dp)) {
+        Button(
+            onClick = { onSaveClick() },
+            modifier = Modifier.width(100.dp),
+            enabled = isEnabled
+        ) {
             Text(text = "Save")
         }
     }
@@ -121,7 +131,7 @@ fun Buttons(modifier: Modifier = Modifier, onCancelClick: () -> Unit, onSaveClic
 @Preview
 @Composable
 private fun ButtonsPreview() {
-    Buttons(onCancelClick = {}, onSaveClick = {})
+    Buttons(onCancelClick = {}, onSaveClick = {}, isEnabled = true)
 }
 
 @Preview
